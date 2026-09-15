@@ -112,3 +112,16 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+## PostgreSQL + RLS (multi-tenant)
+
+Local Postgres with row-level security demo:
+
+```bash
+docker compose up -d          # starts Postgres, applies db/init/*.sql automatically
+bash db/smoke.sh              # proves tenant isolation (and 3 leak attempts failing)
+```
+
+- `db/init/01-schema.sql` — tenants + purchase_orders schema
+- `db/init/02-rls.sql` — RLS policy scoping every query to `app.tenant_id`
+- Connect as the limited role: `docker exec -it levelpath-prep-db psql -U tenant_app -d app`
