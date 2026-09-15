@@ -4,7 +4,9 @@
 
 set -euo pipefail
 
-DB_CMD='docker exec -i levelpath-prep-db psql -U tenant_app -d app -v ON_ERROR_STOP=1'
+source "$(dirname "$0")/../.env"
+
+DB_CMD="docker exec -i -e PGPASSWORD=$TENANT_APP_PASSWORD levelpath-prep-db psql -U tenant_app -d app -v ON_ERROR_STOP=1"
 
 echo "== Session 1: tenant Acme =="
 echo "BEGIN; SET LOCAL app.tenant_id = '11111111-1111-1111-1111-111111111111';
