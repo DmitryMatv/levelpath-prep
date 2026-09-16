@@ -19,6 +19,14 @@ echo "BEGIN; SET LOCAL app.tenant_id = '22222222-2222-2222-2222-222222222222';
 SELECT title FROM purchase_orders;
 COMMIT;" | $DB_CMD
 
+
+# SET LOCAL is used to set the tenant_id for the current transaction only, so that it does not leak into other sessions.
+
+# `app.tenant_id` is session state.
+# `SET LOCAL app.tenant_id = '...'` persists only until the current transaction ends (COMMIT or ROLLBACK), then vanishes.
+
+# SET LOCAL means the value dies when the transaction ends, which is the pooling safety property from our earlier discussion.
+
 echo
 echo "== Attack 1: no tenant set (must return 0 rows) =="
 echo "BEGIN; SELECT count(*) AS visible_without_tenant FROM purchase_orders;
