@@ -1,0 +1,17 @@
+node_modules
+dist
+coverage
+.git
+.gitignore
+.env
+.env.*
+!.env.example
+test
+specs
+db
+*.md
+Dockerfile
+docker-compose.yml
+jest.config.ts
+oxlintrc.json
+prettierrc

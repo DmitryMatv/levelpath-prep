@@ -1,3 +1,21 @@
+# levelpath-prep
+
+Interview prep: a multi-tenant NestJS + PostgreSQL app with row-level security, built spec by spec with coding agents.
+
+## Quick start
+
+```
+cp .env.example .env      # adjust if you like; defaults work
+sudo docker compose up -d --build
+curl localhost:3000/purchase-orders -H 'x-tenant-id: 11111111-1111-1111-1111-111111111111'
+```
+
+The db seeds two tenants (`11111111-…`, `22222222-…`) with two purchase orders each. Swap the header value to switch tenants. Host-side checks: `npm test`, `npm run test:e2e`, `npm run lint`.
+
+Design notes live in `specs/`.
+
+## NestJS
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>

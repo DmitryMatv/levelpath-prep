@@ -18,5 +18,20 @@ services:
       timeout: 3s
       retries: 10
 
+  api:
+    build: .
+    container_name: levelpath-prep-api
+    ports:
+      - '${API_PORT:-3000}:3000'
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_PORT: '5432'
+      POSTGRES_DB: ${POSTGRES_DB}
+      TENANT_APP_USER: ${TENANT_APP_USER}
+      TENANT_APP_PASSWORD: ${TENANT_APP_PASSWORD}
+    depends_on:
+      db:
+        condition: service_healthy
+
 volumes:
   db_data:
