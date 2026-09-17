@@ -1,9 +1,7 @@
 import { Injectable, OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Pool, PoolClient } from 'pg';
-
-const UUID_PATTERN =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+import { isUuid } from '../common/is-uuid';
 
 @Injectable()
 export class DatabaseService implements OnModuleDestroy {
@@ -24,7 +22,7 @@ export class DatabaseService implements OnModuleDestroy {
     tenantId: string,
     run: (client: PoolClient) => Promise<T>,
   ): Promise<T> {
-    if (!UUID_PATTERN.test(tenantId)) {
+    if (!isUuid(tenantId)) {
       throw new Error(`withTenant: tenantId is not a valid UUID: ${tenantId}`);
     }
     const client = await this.pool.connect();

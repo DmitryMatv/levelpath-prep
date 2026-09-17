@@ -1,4 +1,4 @@
-import { Test } from '@nestjs/testing';
+import { Test, type TestingModule } from '@nestjs/testing';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseService } from './database.service';
 
@@ -6,7 +6,7 @@ const ACME = '11111111-1111-1111-1111-111111111111';
 const UNKNOWN = '99999999-9999-9999-9999-999999999999';
 
 describe('DatabaseService.withTenant', () => {
-  let moduleRef: Awaited<ReturnType<typeof Test.createTestingModule>['compile']>;
+  let moduleRef: TestingModule;
   let service: DatabaseService;
 
   beforeAll(async () => {
@@ -31,7 +31,9 @@ describe('DatabaseService.withTenant', () => {
 
   it('returns zero rows for an unknown tenant (fail closed)', async () => {
     const result = await service.withTenant(UNKNOWN, (client) =>
-      client.query<{ n: number }>('SELECT count(*)::int AS n FROM purchase_orders'),
+      client.query<{ n: number }>(
+        'SELECT count(*)::int AS n FROM purchase_orders',
+      ),
     );
     expect(result.rows[0].n).toBe(0);
   });
@@ -58,7 +60,9 @@ describe('DatabaseService.withTenant', () => {
     ).rejects.toThrow('boom after insert');
 
     const result = await service.withTenant(ACME, (client) =>
-      client.query<{ n: number }>('SELECT count(*)::int AS n FROM purchase_orders'),
+      client.query<{ n: number }>(
+        'SELECT count(*)::int AS n FROM purchase_orders',
+      ),
     );
     expect(result.rows[0].n).toBe(2);
   });
